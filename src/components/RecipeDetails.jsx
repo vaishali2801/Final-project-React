@@ -49,7 +49,7 @@ const RecipeDetails = () => {
     return (
       <Container className="mt-5 text-center">
         <h3>Recipe not found!</h3>
-        <Button onClick={() => navigate("/recipeList")}>
+        <Button onClick={() => navigate(-1)}>
           Back to Recipes
         </Button>
       </Container>

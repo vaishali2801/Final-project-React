@@ -63,8 +63,8 @@ const LoginPage = () => {
                     <Col>
                         <Form onSubmit={handleSubmit} style={{ width: "400px" }}>
                             <Card className='p-4 gap-3 card-layout' >
+                                <h5 className='text-center'>{user}</h5>
                                 <h1 className="text-center">{isLogin ? "Login" : "Sign up"}</h1>
-                                <h5>{user}</h5>
                                 <Form.Group as={Col} md="4" lg="">
                                     <Form.Label>Email :</Form.Label>
                                     <Form.Control
