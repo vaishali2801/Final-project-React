@@ -1,0 +1,152 @@
+.recipe-footer {
+    background: #202820;
+    color: #f5f5f0;
+    padding: 55px 7% 0;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+    gap: 40px;
+    padding-bottom: 40px;
+}
+
+.footer-brand h2 {
+    font-size: 27px;
+    margin: 0 0 18px;
+    color: #f5a623;
+}
+
+.footer-emoji {
+    margin-right: 6px;
+}
+
+.footer-brand p,
+.footer-newsletter p {
+    color: #c4cbc1;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.footer-links,
+.footer-newsletter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-links h3,
+.footer-newsletter h3 {
+    font-size: 18px;
+    margin: 5px 0 20px;
+    color: #ffffff;
+}
+
+.footer-links a,
+.footer-socials a {
+    text-decoration: none;
+    color: #c4cbc1;
+    font-size: 14px;
+    margin-bottom: 13px;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover,
+.footer-socials a:hover {
+    color: #f5a623;
+}
+
+.footer-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.footer-socials a {
+    margin-bottom: 0;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+}
+
+.newsletter-form input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px;
+    border: 1px solid #536052;
+    border-radius: 6px;
+    background: #303a30;
+    color: #ffffff;
+    outline: none;
+}
+
+.newsletter-form input:focus {
+    border-color: #f5a623;
+}
+
+.newsletter-form input::placeholder {
+    color: #b5bdb3;
+}
+
+.newsletter-form button {
+    padding: 13px;
+    border: none;
+    border-radius: 6px;
+    background: #f5a623;
+    color: #202820;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.newsletter-form button:hover {
+    background: #ffc15c;
+}
+
+.footer-bottom {
+    border-top: 1px solid #414a40;
+    text-align: center;
+    padding: 20px 10px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: #c4cbc1;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+@media (max-width: 992px) {
+    .footer-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 35px;
+    }
+}
+
+@media (max-width: 576px) {
+    .recipe-footer {
+        padding: 40px 6% 0;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .footer-brand h2 {
+        font-size: 24px;
+    }
+
+    .footer-links h3,
+    .footer-newsletter h3 {
+        margin-bottom: 14px;
+    }
+}
