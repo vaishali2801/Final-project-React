@@ -108,7 +108,7 @@ const RecipeForm = () => {
 
   return (
     <>
-      <Container style={{ height: "100vh" }}>
+      <Container>
         <Row>
           <Col>
             <Form onSubmit={handleSubmit}>
