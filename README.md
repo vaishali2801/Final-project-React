@@ -3,6 +3,8 @@
 RecipeBook is a simple recipe management web application built using React.js, Redux Toolkit, React Bootstrap, Firebase Authentication, and JSON Server. Users can explore recipes, view recipe details, sort and filter recipes, and manage recipes after logging in.
 
 ##screenshot
+<img width="2560" height="1857" alt="project-react" src="https://github.com/user-attachments/assets/bb11e6f0-415d-4155-b2bc-47ecbc1a3570" />
+
 <img width="1280" height="832" alt="Screenshot 2026-10-19 at 1 57 03 PM" src="https://github.com/user-attachments/assets/f48156cd-e112-4521-be07-fe1550bd385b" />
 <img width="1280" height="832" alt="Screenshot 2026-10-19 at 1 56 59 PM" src="https://github.com/user-attachments/assets/21b9a798-18eb-4534-a3ee-f8abb6b8eb43" />
 <img width="1280" height="832" alt="Screenshot 2026-10-19 at 1 56 54 PM" src="https://github.com/user-attachments/assets/4836ce46-aefa-4b85-8621-72a1085af870" />
