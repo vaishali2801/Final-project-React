@@ -2,6 +2,10 @@
 import { useSelector } from "react-redux";
 import { Container, Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+
+import { fetchRecipes } from "../feature/recipeSlice";
+import { useDispatch } from "react-redux";
 
 const RecipeDetails = () => {
   const { id } = useParams();
@@ -21,6 +25,13 @@ const RecipeDetails = () => {
       </Container>
     );
   }
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (recipes.length === 0) {
+      dispatch(fetchRecipes());
+    }
+  }, [dispatch, recipes.length]);
 
   return (
     <Container className="mt-5">

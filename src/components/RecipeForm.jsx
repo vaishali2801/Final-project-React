@@ -67,37 +67,45 @@ const RecipeForm = () => {
       }
     })
   }
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (loading) return;
 
     if (!user) {
       navigate("/login");
       return;
     }
-    if (editValue) {
-      dispatch(
-        handleEdit({
-          ...input,
-          id: editValue.id,
-        })
-      );
+
+    try {
+      if (editValue) {
+        await dispatch(
+          handleEdit({
+            ...input,
+            id: editValue.id,
+            createdAt: editValue.createdAt,
+          })
+        ).unwrap();
+      } else {
+        await dispatch(add(input)).unwrap();
+      }
+
+      setInput({
+        title: "",
+        ingredients: "",
+        instructions: "",
+        category: "",
+        cookingTime: "",
+        dietaryPreference: "Vegetarian",
+      });
+
       navigate("/recipeList");
-    } else {
-      dispatch(add(input));
+    } catch (error) {
+      alert(error || "Could not save recipe");
     }
+  };
 
-
-    setInput({
-      title: "",
-      ingredients: "",
-      instructions: "",
-      category: "",
-      cookingTime: "",
-      dietaryPreference: "Vegetarian",
-    });
-    navigate("/recipeList");
-  }
   return (
     <>
       <Container style={{ height: "100vh" }}>

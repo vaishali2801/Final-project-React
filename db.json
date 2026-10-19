@@ -1,0 +1,35 @@
+{
+  "recipes": [
+    {
+      "id": "1",
+      "title": "Gujarati Dhokla",
+      "ingredients": "Besan, lemon juice, Eno, salt, sugar, water",
+      "instructions": "Prepare the batter, add Eno, steam for 15 minutes, and garnish with mustard seeds.",
+      "category": "Breakfast",
+      "cookingTime": "20",
+      "dietaryPreference": "Vegetarian",
+      "createdAt": "2026-10-18T10:00:00.000Z"
+    },
+    {
+      "title": "Paneer Butter Masala",
+      "ingredients": "Paneer, tomatoes, butter, cream, spices",
+      "instructions": "Prepare tomato gravy, add paneer and cream, and simmer until cooked.",
+      "category": "Lunch",
+      "cookingTime": "40",
+      "dietaryPreference": "Vegetarian",
+      "id": "2",
+      "createdAt": "2026-10-19T10:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "title": "Veg Fried Rice",
+      "ingredients": "Rice, carrots, capsicum, peas, soy sauce",
+      "instructions": "Stir-fry the vegetables, add cooked rice and soy sauce, and mix well.",
+      "category": "Dinner",
+      "cookingTime": "25",
+      "dietaryPreference": "Vegan",
+      "createdAt": "2026-10-19T11:00:00.000Z"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

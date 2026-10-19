@@ -1,42 +1,50 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
-import { setEditValue, handleDelete } from "../feature/recipeSlice";
+import { setEditValue, handleDelete, fetchRecipes } from "../feature/recipeSlice";
 import { useAuth } from "../context/AuthContext";
 
 const RecipeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const recipes = useSelector((state) => state.recipe.recipes);
-  const { user,loading } = useAuth();
+  const {
+    recipes,
+    loading,
+    error,
+  } = useSelector((state) => state.recipe);
+  const { user } = useAuth();
 
   const [sortBy, setSortBy] = useState("name");
   const [category, setCategory] = useState("All");
   const [diet, setDiet] = useState("All");
 
-const filteredRecipes = recipes
-  .filter((recipe) =>
-    category === "All" || recipe.category === category
-  )
-  .filter((recipe) =>
-    diet === "All" || recipe.dietaryPreference === diet
-  )
-  .sort((a, b) => {
-    if (sortBy === "name") {
-      return a.title.localeCompare(b.title);
-    }
+  useEffect(() => {
+    dispatch(fetchRecipes());
+  }, [dispatch]);
 
-    if (sortBy === "newest") {
-      return new Date(b.createdAt || 0) -
-        new Date(a.createdAt || 0);
-    }
+  const filteredRecipes = recipes
+    .filter((recipe) =>
+      category === "All" || recipe.category === category
+    )
+    .filter((recipe) =>
+      diet === "All" || recipe.dietaryPreference === diet
+    )
+    .sort((a, b) => {
+      if (sortBy === "name") {
+        return a.title.localeCompare(b.title);
+      }
 
-    return new Date(a.createdAt || 0) -
-      new Date(b.createdAt || 0);
-  });
+      if (sortBy === "newest") {
+        return new Date(b.createdAt || 0) -
+          new Date(a.createdAt || 0);
+      }
+
+      return new Date(a.createdAt || 0) -
+        new Date(b.createdAt || 0);
+    });
 
   const handleEdit = (recipe) => {
     if (!user) {
@@ -48,18 +56,25 @@ const filteredRecipes = recipes
     navigate("/recipeForm");
   };
 
-  const handleDeleteRecipe = (id) => {
+  const handleDeleteRecipe = async (id) => {
     if (!user) {
       navigate("/login");
       return;
     }
 
-    if (window.confirm("Are you sure you want to delete this recipe?")) {
-      dispatch(handleDelete(id));
+    if (!window.confirm("Are you sure you want to delete this recipe?")) {
+      return;
+    }
+
+    try {
+      await dispatch(handleDelete(id)).unwrap();
+    } catch (error) {
+      alert(error || "Could not delete recipe");
     }
   };
 
   return (
+
     <Container className="py-5">
       <h2 className="text-center mb-4">Recipe List</h2>
 
@@ -109,6 +124,13 @@ const filteredRecipes = recipes
       {!user && (
         <p className="text-center text-muted">
           Log in to add, edit, or delete recipes.
+        </p>
+      )}
+      {loading && <p className="text-center">Loading recipes...</p>}
+
+      {error && (
+        <p className="text-danger text-center">
+          Error: {error}
         </p>
       )}
 

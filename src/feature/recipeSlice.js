@@ -1,137 +1,176 @@
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+const API_URL = "http://localhost:3000/recipes";
+
+// GET: Fetch all recipes
+export const fetchRecipes = createAsyncThunk(
+    "recipe/fetchRecipes",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetch(API_URL);
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch recipes");
+            }
+
+            return await response.json();
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+// POST: Add a recipe
+export const add = createAsyncThunk(
+    "recipe/add",
+    async (recipe, { rejectWithValue }) => {
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...recipe,
+                    createdAt: new Date().toISOString(),
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to add recipe");
+            }
+
+            return await response.json();
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+// PUT: Update a recipe
+export const handleEdit = createAsyncThunk(
+    "recipe/handleEdit",
+    async (recipe, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${API_URL}/${recipe.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(recipe),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to update recipe");
+            }
+
+            return await response.json();
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+// DELETE: Delete a recipe
+export const handleDelete = createAsyncThunk(
+    "recipe/handleDelete",
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete recipe");
+            }
+
+            return id;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
 
 const initialState = {
-    recipes: [
-        {
-            id: 1,
-            title: "Gujarati Dhokla",
-            ingredients: "Besan, lemon juice, Eno, salt, sugar, water",
-            instructions:
-                "Mix ingredients into a batter, add Eno, steam for 15 minutes, and garnish with mustard seeds.",
-            category: "Breakfast",
-            cookingTime: "20",
-            dietaryPreference: "Vegetarian",
-
-            createdAt: "2026-10-19T10:00:00.000Z",
-
-        },
-        {
-            id: 2,
-            title: "Paneer Butter Masala",
-            ingredients: "Paneer, tomatoes, butter, cream, spices",
-            instructions:
-                "Prepare tomato gravy with spices, add paneer and cream, and simmer until cooked.",
-            category: "Lunch",
-            cookingTime: "35",
-            dietaryPreference: "Vegetarian",
-
-            createdAt: "2026-10-19T10:00:00.000Z",
-        },
-        {
-            id: 3,
-            title: "Veg Fried Rice",
-            ingredients: "Rice, carrots, capsicum, peas, soy sauce",
-            instructions:
-                "Stir-fry vegetables, add cooked rice and soy sauce, and mix well.",
-            category: "Dinner",
-            cookingTime: "25",
-            dietaryPreference: "Vegetarian",
-
-            createdAt: "2026-10-19T10:00:00.000Z",
-        },
-        {
-            id: 4,
-            title: "Chocolate Cake",
-            ingredients: "Flour, cocoa powder, sugar, milk, butter, baking powder",
-            instructions:
-                "Mix ingredients into a batter, pour into a cake tin, and bake until done.",
-            category: "Dessert",
-            cookingTime: "45",
-            dietaryPreference: "Vegetarian",
-
-            createdAt: "2026-10-19T10:00:00.000Z",
-        },
-        {
-            id: 5,
-            title: "Masala Dosa",
-            ingredients: "Dosa batter, potatoes, onion, mustard seeds, spices",
-            instructions:
-                "Prepare spiced potato filling, spread dosa batter on a hot pan, add filling, and fold.",
-            category: "Breakfast",
-            cookingTime: "30",
-            dietaryPreference: "Vegetarian",
-
-            createdAt: "2026-10-19T10:00:00.000Z",
-        },
-        {
-            id: 6,
-            title: "Fresh Fruit Salad",
-            ingredients: "Apple, banana, grapes, orange, pomegranate",
-            instructions:
-                "Wash and chop all fruits, mix gently, and serve fresh.",
-            category: "Snacks",
-            cookingTime: "10",
-            dietaryPreference: "Vegetarian",
-
-            createdAt: "2026-10-19T10:00:00.000Z",
-        },
-    ],
+    recipes: [],
     editValue: null,
+    loading: false,
+    error: null,
 };
 
 const recipeSlice = createSlice({
     name: "recipe",
     initialState,
+
     reducers: {
-        add: (state, action) => {
-            const recipe = {
-                id: Date.now(),
-                title: action.payload.title,
-                ingredients: action.payload.ingredients,
-                instructions: action.payload.instructions,
-                category: action.payload.category,
-                cookingTime: action.payload.cookingTime,
-                dietaryPreference:action.payload.dietaryPreference,
-                createdAt: new Date().toISOString(),
-            };
-
-            state.recipes.push(recipe);
-        },
-
-        handleEdit: (state, action) => {
-            const recipeIndex = state.recipes.findIndex((p) => p.id === state.editValue.id);
-
-
-            if (recipeIndex !== -1) {
-                state.recipes[recipeIndex] = action.payload;
-            }
-
-            state.editValue = null;
-        },
-
-        handleDelete: (state, action) => {
-            state.recipes = state.recipes.filter(
-                (recipe) => recipe.id !== action.payload
-            );
-
-            if (state.editValue?.id === action.payload) {
-                state.editValue = null;
-            }
-        },
-
         setEditValue: (state, action) => {
             state.editValue =
-                state.recipes.find((recipe) => recipe.id === action.payload);
+                state.recipes.find(
+                    (recipe) => String(recipe.id) === String(action.payload)
+                ) || null;
         },
+
+        clearEditValue: (state) => {
+            state.editValue = null;
+        },
+    },
+
+    extraReducers: (builder) => {
+        builder
+            // Fetch recipes
+            .addCase(fetchRecipes.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchRecipes.fulfilled, (state, action) => {
+                state.loading = false;
+                state.recipes = action.payload;
+            })
+            .addCase(fetchRecipes.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || action.error.message;
+            })
+
+            // Add recipe
+            .addCase(add.fulfilled, (state, action) => {
+                state.recipes.push(action.payload);
+                state.editValue = null;
+            })
+            .addCase(add.rejected, (state, action) => {
+                state.error = action.payload || action.error.message;
+            })
+
+            // Update recipe
+            .addCase(handleEdit.fulfilled, (state, action) => {
+                const index = state.recipes.findIndex(
+                    (recipe) => String(recipe.id) === String(action.payload.id)
+                );
+
+                if (index !== -1) {
+                    state.recipes[index] = action.payload;
+                }
+
+                state.editValue = null;
+            })
+            .addCase(handleEdit.rejected, (state, action) => {
+                state.error = action.payload || action.error.message;
+            })
+
+            // Delete recipe
+            .addCase(handleDelete.fulfilled, (state, action) => {
+                state.recipes = state.recipes.filter(
+                    (recipe) => String(recipe.id) !== String(action.payload)
+                );
+
+                if (
+                    String(state.editValue?.id) === String(action.payload)
+                ) {
+                    state.editValue = null;
+                }
+            })
+            .addCase(handleDelete.rejected, (state, action) => {
+                state.error = action.payload || action.error.message;
+            });
     },
 });
 
-export const {
-    add,
-    handleEdit,
-    handleDelete,
-    setEditValue,
-} = recipeSlice.actions;
+export const { setEditValue, clearEditValue } = recipeSlice.actions;
 
 export default recipeSlice.reducer;
